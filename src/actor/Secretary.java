@@ -18,6 +18,7 @@ public class Secretary implements SecretaryController {
 
     private static final String NO_SUCH_COURSE = "Unfortunately, the course with the given number doesn't exist.";
     private static final String STUDENT_WITH_SAME_SURNAME_EXISTS = "Student with the same surname already exists in this group.";
+    private static final String NULL_ARGUMENT = "The argument that was passed to this method is null.";
 
     public Secretary(GeneralDatabase generalDatabase) {
         this.generalDatabase = generalDatabase;
@@ -27,13 +28,11 @@ public class Secretary implements SecretaryController {
     @Override
     public void createGroup(String name, int courseNumber, List<Student> students) {
         synchronized (generalDatabase) {
-            Group group;
-            if (students != null) {
-                group = new Group(name, courseNumber, students);
-            } else {
-                throw new IllegalArgumentException();
+            if (students == null) {
+                throw new IllegalArgumentException(NULL_ARGUMENT);
             }
-
+            Group group;
+            group = new Group(name, courseNumber, students);
             groupDatabase.addGroupToDatabase(group);
         }
     }
@@ -41,6 +40,9 @@ public class Secretary implements SecretaryController {
     @Override
     public void deleteGroup(Group group) {
         synchronized (generalDatabase) {
+            if (group == null) {
+                throw new IllegalArgumentException(NULL_ARGUMENT);
+            }
             groupDatabase.removeGroupFromDatabase(group);
         }
     }
@@ -48,6 +50,9 @@ public class Secretary implements SecretaryController {
     @Override
     public List<Student> getListOfStudents(Group group) {
         synchronized (generalDatabase) {
+            if (group == null) {
+                throw new IllegalArgumentException(NULL_ARGUMENT);
+            }
             return group.getStudents();
         }
     }
@@ -76,6 +81,9 @@ public class Secretary implements SecretaryController {
     @Override
     public void addStudentToGroup(Student student, Group group) {
         synchronized (generalDatabase) {
+            if (student == null || group == null) {
+                throw new IllegalArgumentException(NULL_ARGUMENT);
+            }
             try {
                 group.addStudent(student);
             } catch (StudentWithSameSurnameAlreadyExistsException e) {

@@ -19,6 +19,8 @@ public class Teacher implements TeacherController {
     private final GroupDatabase groupDatabase;
     private final StudentDatabase studentDatabase;
 
+    private static final String NULL_ARGUMENT = "The argument that was passed to this method is null.";
+
     public Teacher(GeneralDatabase generalDatabase) {
         this.generalDatabase = generalDatabase;
         this.groupDatabase = generalDatabase.getGroupDatabase();
@@ -28,6 +30,9 @@ public class Teacher implements TeacherController {
     @Override
     public List<Student> getListOfStudentsByGroup(Group group) {
         synchronized (generalDatabase) {
+            if (group == null) {
+                throw new IllegalArgumentException(NULL_ARGUMENT);
+            }
             return group.getStudents();
         }
     }

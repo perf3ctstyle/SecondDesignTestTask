@@ -21,6 +21,7 @@ public class Dean implements DeanController {
     private final StudentDatabase studentDatabase;
 
     private static final String STUDENT_WITH_SAME_SURNAME_EXISTS = "Student with the same surname already exists in this group.";
+    private static final String NULL_ARGUMENT = "The argument that was passed to this method is null.";
 
     public Dean(GeneralDatabase generalDatabase) {
         this.generalDatabase = generalDatabase;
@@ -31,6 +32,9 @@ public class Dean implements DeanController {
     @Override
     public void changeIsStudentStudying(Student student, boolean isStudying) {
         synchronized (generalDatabase) {
+            if (student == null) {
+                throw new IllegalArgumentException(NULL_ARGUMENT);
+            }
             student.setIsStudying(isStudying);
         }
     }
@@ -60,6 +64,9 @@ public class Dean implements DeanController {
     @Override
     public void changeStudentGroup(Student student, Group fromGroup, Group toGroup) {
         synchronized (generalDatabase) {
+            if (student == null || fromGroup == null || toGroup == null) {
+                throw new IllegalArgumentException(NULL_ARGUMENT);
+            }
             try {
                 toGroup.addStudent(student);
                 fromGroup.removeStudent(student);

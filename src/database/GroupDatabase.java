@@ -12,12 +12,10 @@ public class GroupDatabase {
 
     private final List<Deque<Group>> groupsByCourses;
 
+    private static final String NULL_ARGUMENT = "The argument that was passed to this method is null.";
+
     public GroupDatabase(List<Deque<Group>> groupsByCourses) {
-        if (groupsByCourses != null) {
-            this.groupsByCourses = groupsByCourses;
-        } else {
-            throw new IllegalArgumentException();
-        }
+        this.groupsByCourses = groupsByCourses;
     }
 
     public List<Deque<Group>> getGroupsByCourses() {
@@ -33,6 +31,9 @@ public class GroupDatabase {
     }
 
     public void addGroupToDatabase(Group group) {
+        if (group == null) {
+            throw new IllegalArgumentException(NULL_ARGUMENT);
+        }
         int courseNumber = group.getCourseNumber();
 
         for (Deque<Group> groups : groupsByCourses) {
@@ -47,6 +48,9 @@ public class GroupDatabase {
     }
 
     public void removeGroupFromDatabase(Group group) {
+        if (group == null) {
+            throw new IllegalArgumentException(NULL_ARGUMENT);
+        }
         int courseNumber = group.getCourseNumber();
 
         for (Deque<Group> groups : groupsByCourses) {
